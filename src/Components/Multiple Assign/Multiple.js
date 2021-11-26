@@ -33,6 +33,7 @@ function Multiple() {
                 let filterData = await axios.get(`${env.api}/filter-student/${showMentor}`)
                 if (filterData.data == "") {
                     alert("No record found!")
+                    setStudData([])
                 } else {
                     setStudData([...filterData.data])
                 }

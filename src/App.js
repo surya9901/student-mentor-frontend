@@ -22,7 +22,7 @@ function App() {
           <Route path="/" element={<Home />} exact />
           <Route path="/mentors" element={<Mentor />} exact />
           <Route path="/students" element={<Students />} exact />
-          <Route path="/multiple-assign" element={<Multiple />} exact />
+          <Route path="/multipleAssign" element={<Multiple />} exact />
         </Routes>
       </Router>
     </>

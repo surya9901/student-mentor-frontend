@@ -40,7 +40,7 @@ function Navbar() {
                             <NavLink to="/students" className="nav-link .active" onClick={toggleClose}>
                                 Students
                             </NavLink>
-                            <NavLink to="/multiple-assign" className="nav-link .active" onClick={toggleClose}>
+                            <NavLink to="/multipleAssign" className="nav-link .active" onClick={toggleClose}>
                                 Multiple Assign
                             </NavLink>
                         </div>

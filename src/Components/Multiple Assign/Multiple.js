@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router'
 
 function Multiple() {
 
-    // const navigate = useNavigate();
+    const navigate = useNavigate();
 
     useEffect(() => {
         fetchdata()
@@ -62,9 +62,9 @@ function Multiple() {
                 setAssignMentor("")
                 setShowMentor("")
                 alert("Assigned")
-                // if (alert) {
-                    // navigate('/students')
-                // }
+                if (alert) {
+                    navigate('/students')
+                }
             } catch (error) {
                 console.log(error)
             }

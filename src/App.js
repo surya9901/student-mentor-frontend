@@ -1,24 +1,31 @@
-import logo from './logo.svg';
 import './App.css';
+import 'bootstrap/dist/css/bootstrap.css';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route
+} from "react-router-dom";
+
+import Navbar from './Components/Navbar/Navbar';
+import Home from './Components/Home/Home';
+import Mentor from './Components/Mentor/Mentor';
+import Students from './Components/Students/Students';
+import Multiple from './Components/Multiple Assign/Multiple';
+
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <Router>
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<Home />} exact />
+          <Route path="/mentors" element={<Mentor />} exact />
+          <Route path="/students" element={<Students />} exact />
+          <Route path="/multiple-assign" element={<Multiple />} exact />
+        </Routes>
+      </Router>
+    </>
   );
 }
 

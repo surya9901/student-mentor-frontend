@@ -1,23 +1,22 @@
-import React, { useEffect } from 'react'
-import './Multiple.css'
-import axios from 'axios'
-import env from '../settings'
-import { useState } from 'react/cjs/react.development'
-import { useNavigate } from 'react-router'
+import React, { useEffect, useState } from 'react';
+import './Multiple.css';
+import axios from 'axios';
+import env from '../settings';
+import { useNavigate } from 'react-router';
 
 function Multiple() {
 
-    const navigate = useNavigate();
+    var navigate = useNavigate();
 
     useEffect(() => {
         fetchdata()
-    }, [])
+    }, []);
 
     // to get the all the mentors in dropdown
     const [mentorName, setMentorName] = useState([])
     const fetchdata = async (e) => {
         try {
-            let data = await axios.get(`${env.api}/mentor`)
+            let data = await axios.get(`${env.api}/mentor`);
             setMentorName([...data.data])
         } catch (error) {
             console.log(error)

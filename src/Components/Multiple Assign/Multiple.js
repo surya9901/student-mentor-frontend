@@ -57,7 +57,7 @@ function Multiple() {
             alert("no Mentor selected to assign")
         } else {
             try {
-                let multiUpdate = await axios.put(`${env.api}/update-multiple`, { assignMentor, showMentor })
+                await axios.put(`${env.api}/update-multiple`, { assignMentor, showMentor })
                 setStudData([])
                 setAssignMentor("")
                 setShowMentor("")

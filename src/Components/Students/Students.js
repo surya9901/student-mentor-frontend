@@ -16,6 +16,7 @@ function Students() {
     const [studentEmail, setStudentEmail] = useState("")
     const [studentPhone, setStudentPhone] = useState("")
     const [studentMentor, setStudentMentor] = useState("")
+    const [load, setLoad] = useState(false)
 
     // add students dropdown
     const [dropDown, setDropDown] = useState(false)
@@ -45,10 +46,12 @@ function Students() {
     // to fetch the students data
     const fetchdata = async (e) => {
         try {
+            setLoad(true)
             let data = await axios.get(`${env.api}/student`)
             setTableDetails([...data.data])
             let mentor_data = await axios.get(`${env.api}/mentor`)
             setMentorName([...mentor_data.data])
+            setLoad(false)
         } catch (error) {
             console.log(error)
         }
@@ -65,7 +68,7 @@ function Students() {
             "Mentor": studentMentor
         };
         try {
-            let student_create = await axios.post(`${env.api}/create-student`, { student_details })
+            await axios.post(`${env.api}/create-student`, { student_details })
             setStudentName("")
             setStudentEmail("")
             setStudentPhone("")
@@ -81,7 +84,7 @@ function Students() {
     // to delete the students data
     const handleDelete = async (id) => {
         try {
-            let student_delete = await axios.delete(`${env.api}/delete-student/${id}`)
+            await axios.delete(`${env.api}/delete-student/${id}`)
             fetchdata()
             {
                 filterTable ? filter() : fetchdata()
@@ -114,7 +117,7 @@ function Students() {
             "Mentor": studentMentor
         };
         try {
-            let editdata = await axios.put(`${env.api}/edit-student/${studentID}`, { student_details })
+            await axios.put(`${env.api}/edit-student/${studentID}`, { student_details })
             setStudentEdit(false)
             setStudentName("")
             setStudentEmail("")
@@ -276,72 +279,77 @@ function Students() {
 
             <div className="student_details mt-3 mb-3">
                 {
-                    tableDetails == "" ? <h4 className="text-center mt-5">No Student Data Available, Add Mentor Data first and then Student Data</h4> :
-                        <table className="table table-striped col text-center">
-                            <thead>
-                                <tr>
-                                    <th scope="col">Student Name</th>
-                                    <th scope="col">Mail id</th>
-                                    <th scope="col">Phone number</th>
-                                    <th scope="col">Mentor Assigned</th>
-                                    <th scope="col">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {
-                                    filterTable ?
-                                        <>{
-                                            receivedFilter == "" ? <h4>No Data</h4> :
-                                                <>{
-                                                    receivedFilter.map((obj) => {
-                                                        return (
-                                                            <tr>
-                                                                <th scope="row">{obj.student_details.Name}</th>
-                                                                <td>{obj.student_details.Email}</td>
-                                                                <td>{obj.student_details.Phone}</td>
-                                                                <td>{obj.student_details.Mentor}</td>
-                                                                <td>
-                                                                    <div className="row">
-                                                                        <div className="col g-1">
-                                                                            <button className="btn btn-secondary" onClick={() => edit(obj)}><i className="fas fa-edit"></i></button>
-                                                                        </div>
-                                                                        <div className="col g-1">
-                                                                            <button className="btn btn-danger" onClick={() => handleDelete(obj._id)}><i className="fas fa-user-minus"></i></button>
-                                                                        </div>
-                                                                    </div>
-                                                                </td>
-                                                            </tr>
-                                                        )
-                                                    })
-                                                }</>
-                                        }</> : <>
+                    load ? <h2 className='text-center text-muted'>Loading...</h2> :
+                        <>
+                            {
+                                tableDetails == "" ? <h4 className="text-center mt-5">No Student Data Available, Add Mentor Data first and then Student Data</h4> :
+                                    <table className="table table-striped col text-center">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">Student Name</th>
+                                                <th scope="col">Mail id</th>
+                                                <th scope="col">Phone number</th>
+                                                <th scope="col">Mentor Assigned</th>
+                                                <th scope="col">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
                                             {
-                                                tableDetails.map((obj) => {
-                                                    return (
-                                                        <tr>
-                                                            <th scope="row">{obj.student_details.Name}</th>
-                                                            <td>{obj.student_details.Email}</td>
-                                                            <td>{obj.student_details.Phone}</td>
-                                                            <td>{obj.student_details.Mentor}</td>
-                                                            <td>
-                                                                <div className="row">
-                                                                    <div className="col g-1">
-                                                                        <button className="btn btn-secondary" onClick={() => edit(obj)}><i className="fas fa-edit"></i></button>
-                                                                    </div>
-                                                                    <div className="col g-1">
-                                                                        <button className="btn btn-danger" onClick={() => handleDelete(obj._id)}><i className="fas fa-user-minus"></i></button>
-                                                                    </div>
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                    )
-                                                })
+                                                filterTable ?
+                                                    <>{
+                                                        receivedFilter == "" ? <h4>No Data</h4> :
+                                                            <>{
+                                                                receivedFilter.map((obj) => {
+                                                                    return (
+                                                                        <tr>
+                                                                            <th scope="row">{obj.student_details.Name}</th>
+                                                                            <td>{obj.student_details.Email}</td>
+                                                                            <td>{obj.student_details.Phone}</td>
+                                                                            <td>{obj.student_details.Mentor}</td>
+                                                                            <td>
+                                                                                <div className="row">
+                                                                                    <div className="col g-1">
+                                                                                        <button className="btn btn-secondary" onClick={() => edit(obj)}><i className="fas fa-edit"></i></button>
+                                                                                    </div>
+                                                                                    <div className="col g-1">
+                                                                                        <button className="btn btn-danger" onClick={() => handleDelete(obj._id)}><i className="fas fa-user-minus"></i></button>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </td>
+                                                                        </tr>
+                                                                    )
+                                                                })
+                                                            }</>
+                                                    }</> : <>
+                                                        {
+                                                            tableDetails.map((obj) => {
+                                                                return (
+                                                                    <tr>
+                                                                        <th scope="row">{obj.student_details.Name}</th>
+                                                                        <td>{obj.student_details.Email}</td>
+                                                                        <td>{obj.student_details.Phone}</td>
+                                                                        <td>{obj.student_details.Mentor}</td>
+                                                                        <td>
+                                                                            <div className="row">
+                                                                                <div className="col g-1">
+                                                                                    <button className="btn btn-secondary" onClick={() => edit(obj)}><i className="fas fa-edit"></i></button>
+                                                                                </div>
+                                                                                <div className="col g-1">
+                                                                                    <button className="btn btn-danger" onClick={() => handleDelete(obj._id)}><i className="fas fa-user-minus"></i></button>
+                                                                                </div>
+                                                                            </div>
+                                                                        </td>
+                                                                    </tr>
+                                                                )
+                                                            })
+                                                        }
+                                                    </>
                                             }
-                                        </>
-                                }
 
-                            </tbody>
-                        </table>
+                                        </tbody>
+                                    </table>
+                            }
+                        </>
                 }
             </div>
         </div>

@@ -17,12 +17,15 @@ function Mentor() {
     const [dropDown, setDropDown] = useState(false)
     const [tableDetails, setTableDetails] = useState([])
     const [mentorEdit, setMentorEdit] = useState(false)
+    const [load, setLoad] = useState(false)
 
 
     const fetchdata = async (e) => {
         try {
+            setLoad(true)
             let data = await axios.get(`${env.api}/mentor`)
             setTableDetails([...data.data])
+            setLoad(false)
         } catch (error) {
             console.log(error)
         }
@@ -38,7 +41,7 @@ function Mentor() {
             "Field": mentorField
         };
         try {
-            let mentor_create = await axios.post(`${env.api}/create-mentor`, { mentor_details })
+            await axios.post(`${env.api}/create-mentor`, { mentor_details })
             setMentorName("")
             setMentorEmail("")
             setMentorPhone("")
@@ -53,7 +56,7 @@ function Mentor() {
 
     const handleDelete = async (id) => {
         try {
-            let mentor_delete = await axios.delete(`${env.api}/delete-mentor/${id}`)
+            await axios.delete(`${env.api}/delete-mentor/${id}`)
             fetchdata()
         } catch (error) {
             console.log(error)
@@ -81,7 +84,7 @@ function Mentor() {
             "Field": mentorField
         };
         try {
-            let editdata = await axios.put(`${env.api}/edit-mentor/${mentorID}`, { mentor_details })
+            await axios.put(`${env.api}/edit-mentor/${mentorID}`, { mentor_details })
             setMentorEdit(false)
             setMentorName("")
             setMentorEmail("")
@@ -163,44 +166,49 @@ function Mentor() {
             <div className="mentor_details mt-3 mb-3">
                 <h4 className="m-2">Mentor Details:</h4>
                 {
-                    tableDetails.length == "" ? <h4 className="text-center">No Mentor Data Found!</h4> :
-                        <table className="table table-striped col text-center">
-                            <thead>
-                                <tr>
-                                    <th scope="col">Mentor Name</th>
-                                    <th scope="col">Mail id</th>
-                                    <th scope="col">Phone number</th>
-                                    <th scope="col">Field</th>
-                                    <th scope="col">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {
-                                    tableDetails.map((obj) => {
-                                        return (
+                    load ? <h2 className='text-center text-muted'>Loading...</h2> :
+                        <>
+                            {
+                                tableDetails.length == "" ? <h4 className="text-center">No Mentor Data Found!</h4> :
+                                    <table className="table table-striped col text-center">
+                                        <thead>
                                             <tr>
-                                                <th scope="row">{obj.mentor_details.Name}</th>
-                                                <td>{obj.mentor_details.Email}</td>
-                                                <td>{obj.mentor_details.Phone}</td>
-                                                <td>{obj.mentor_details.Field}</td>
-                                                <td>
-                                                    <div className="row">
-                                                        <div className="col g-1">
-                                                            <button className="btn btn-secondary" onClick={() => edit(obj)}><i className="fas fa-edit"></i></button>
-                                                        </div>
-
-                                                        <div className="col g-1">
-                                                            <button className="btn btn-danger" onClick={() => handleDelete(obj._id)}><i className="fas fa-user-minus"></i></button>
-                                                        </div>
-
-                                                    </div>
-                                                </td>
+                                                <th scope="col">Mentor Name</th>
+                                                <th scope="col">Mail id</th>
+                                                <th scope="col">Phone number</th>
+                                                <th scope="col">Field</th>
+                                                <th scope="col">Action</th>
                                             </tr>
-                                        )
-                                    })
-                                }
-                            </tbody>
-                        </table>}
+                                        </thead>
+                                        <tbody>
+                                            {
+                                                tableDetails.map((obj) => {
+                                                    return (
+                                                        <tr>
+                                                            <th scope="row">{obj.mentor_details.Name}</th>
+                                                            <td>{obj.mentor_details.Email}</td>
+                                                            <td>{obj.mentor_details.Phone}</td>
+                                                            <td>{obj.mentor_details.Field}</td>
+                                                            <td>
+                                                                <div className="row">
+                                                                    <div className="col g-1">
+                                                                        <button className="btn btn-secondary" onClick={() => edit(obj)}><i className="fas fa-edit"></i></button>
+                                                                    </div>
+
+                                                                    <div className="col g-1">
+                                                                        <button className="btn btn-danger" onClick={() => handleDelete(obj._id)}><i className="fas fa-user-minus"></i></button>
+                                                                    </div>
+
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    )
+                                                })
+                                            }
+                                        </tbody>
+                                    </table>}
+                        </>
+                }
             </div>
         </div>
     )

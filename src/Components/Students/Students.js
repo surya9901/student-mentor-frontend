@@ -65,7 +65,7 @@ function Students() {
             "Mentor": studentMentor
         };
         try {
-            let student_create = await axios.post(`http://localhost:5000/create-student`, { student_details })
+            let student_create = await axios.post(`${env.api}/create-student`, { student_details })
             setStudentName("")
             setStudentEmail("")
             setStudentPhone("")
